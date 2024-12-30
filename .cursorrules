@@ -1,0 +1,91 @@
+[System Architecture]
+Below is the system architecture of the trading system. When writing code, follow the architecture. Add to this file as needed, and list created file names in this file.
+
+[Frontend - Angular]
+    │
+    ├── Dashboard
+    │   ├──→ [WebSocket Service]
+    │   └──→ [Monitoring Dashboard]
+    ├── Strategy Configuration
+    │   ├──→ [REST API Service]
+    │   └──→ [Strategy Management Service]
+    ├── Performance Monitoring
+    │   └──→ [WebSocket Service]
+    ├── Notifications
+    │   └──→ [Notification Service]
+    └── Configuration Management
+        └──→ [Configuration Service]
+    
+[Backend - Go]
+    │
+    ├── Core Services
+    │   ├── Market Data Service
+    │   │   ├── Data Ingestion Engine
+    │   │   │   ├── historical_loader
+    │   │   │   │   ├── daily_candles_fetcher
+    │   │   │   │   └── company_info_fetcher
+    │   │   │   │
+    │   │   │   └── realtime_streamer
+    │   │   │       ├── websocket_client
+    │   │   │       └── price_processor
+    │   │   │
+    │   │   └── database (TimescaleDB)
+    │   │       ├── market_data_repository
+    │   │       └── timescale_connector
+    │   ├── Trading Service
+    │   │   ├──→ [Order Management]
+    │   │   ├──→ [Broker API]
+    │   │   └──→ [Simulation Engine]
+    │   └── Risk Management Service
+    │       ├──→ [Position Monitor]
+    │       └──→ [Trading Service]
+    │
+    ├── Support Services
+    │   ├── WebSocket Service
+    │   ├── REST API Service
+    │   ├── Notification Service
+    │   └── Scheduler Service
+    │
+    └── Analysis Services
+        ├── Strategy Engine
+        │   └──→ [Signal Generator]
+        ├── Backtesting Service
+        │   └──→ [TimescaleDB]
+        └── Performance Analytics Service
+            └──→ [TimescaleDB]
+
+[Database - TimescaleDB]
+    │
+    ├── Market Data
+    │   ├── stocks_daily_candles
+    │   │   ├── bucket (TIMESTAMP, partitioned)
+    │   │   ├── symbol (TEXT)
+    │   │   ├── open (DECIMAL)
+    │   │   ├── high (DECIMAL)
+    │   │   ├── low (DECIMAL)
+    │   │   ├── close (DECIMAL)
+    │   │   └── day_volume (BIGINT)
+    │   │
+    │   └── stocks_real_time
+    │       ├── time (TIMESTAMP, partitioned)
+    │       ├── symbol (TEXT)
+    │       ├── price (DECIMAL)
+    │       └── day_volume (BIGINT)
+    │
+    ├── Reference Data
+    │   └── companies
+    │       ├── symbol (TEXT, primary key)
+    │       └── name (TEXT)
+    │
+    ├── Trade Data
+    ├── System Data
+    ├── Strategy Configurations
+    ├── User Data
+    └── Performance Metrics
+
+[Additional Components]
+    │
+    ├── Caching Service
+    │   └──→ [Redis]
+    └── Logging and Monitoring
+        └──→ [Prometheus]
